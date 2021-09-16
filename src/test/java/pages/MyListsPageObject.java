@@ -6,8 +6,8 @@ import org.openqa.selenium.By;
 public class MyListsPageObject extends MainPageObject{
 
     public static final String
-            FOLDER_BY_NAME_TPL = "//*[@text='{FOLDER_NAME}']",
-            ARTICLE_BY_TITLE_TPL = "//*[@text='{TITLE}']";
+            FOLDER_BY_NAME_TPL = "xpath://*[@text='{FOLDER_NAME}']",
+            ARTICLE_BY_TITLE_TPL = "xpath://*[@text='{TITLE}']";
 
     public MyListsPageObject(AppiumDriver driver) {
         super(driver);
@@ -17,7 +17,7 @@ public class MyListsPageObject extends MainPageObject{
 
         String folder_name_after = getFolderByName(folder_name);
         this.waitForElementAndClick(
-                By.xpath(folder_name_after),
+                folder_name_after,
                 "Cannot find folder by name " + folder_name,
                 10
         );
@@ -27,7 +27,7 @@ public class MyListsPageObject extends MainPageObject{
 
         String article_xpath = getSavedArticleByTitle(article_title);
         this.waitForElementAndClick(
-                By.xpath(article_xpath),
+                article_xpath,
                 "Cannot find folder by name " + article_title,
                 10
         );
@@ -39,7 +39,7 @@ public class MyListsPageObject extends MainPageObject{
 
         String article_xpath = getFolderByName(article_title);
         this.swipeElementToLeft(
-                By.xpath(article_xpath),
+                article_xpath,
                 "Cannot find saved article"
         );
 
@@ -50,7 +50,7 @@ public class MyListsPageObject extends MainPageObject{
 
         String article_xpath = getFolderByName(article_title);
         this.waitForElementNotPresent(
-                By.xpath(article_xpath),
+                article_xpath,
                 "Saved article still present with title " + article_title,
                 15
         );
@@ -60,7 +60,7 @@ public class MyListsPageObject extends MainPageObject{
 
         String article_xpath = getFolderByName(article_title);
         this.waitForElementPresent(
-                By.xpath(article_xpath),
+                article_xpath,
                 "Cannot find saved article by title " + article_title,
                 15
         );
