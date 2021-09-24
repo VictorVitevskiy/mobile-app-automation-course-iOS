@@ -24,7 +24,7 @@ public class CoreTestCase {
         capabilities.setCapability("deviceName", "iPhone SE (2nd generation)");
         capabilities.setCapability("platformVersion", "14.3");
         capabilities.setCapability("automationName", "XCUITest");
-        capabilities.setCapability("app", "/Users/u19223188/IdeaProjects/GitHubProjects/mobile-app-automation-course-iOS/apps/Wikipedia.app");
+        capabilities.setCapability("app", "/Users/z19223188/IdeaProjects/mobile-app-automation-course-iOS/apps/Wikipedia.app");
         capabilities.setCapability("orientation", "PORTRAIT");
 
         driver = new IOSDriver<>(new URL(APPIUM_URL), capabilities);
