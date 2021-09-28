@@ -34,7 +34,7 @@ public class MyListsTests extends CoreTestCase {
         if (Platform.getInstance().isAndroid()) {
             articlePageObject.addArticleToMyListForTheFirstTime(folder_name);
         } else {
-            articlePageObject.addArticlesToMySaved();
+            articlePageObject.addArticlesToMySavedForTheFirstTime();
         }
         articlePageObject.closeArticle();
 
@@ -49,54 +49,5 @@ public class MyListsTests extends CoreTestCase {
         myListsPageObject.swipeByArticleToDelete(article_title);
     }
 
-    @Test
-    public void testSaveTwoArticlesToMyList() {
 
-        String folder_name = "Learning programming";
-        String first_title = "Java (programming language)";
-        String second_title = "Python (programming language)";
-
-        SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
-        searchPageObject.initSearchInput();
-        searchPageObject.typeSearchLine("Java");
-        searchPageObject.clickByArticleWithSubstring(first_title);
-
-        ArticlePageObject articlePageObject = ArticlePageObjectFactory.get(driver);
-        if (Platform.getInstance().isAndroid()) {
-            articlePageObject.addArticleToMyListForTheFirstTime(folder_name);
-        } else {
-            articlePageObject.addArticlesToMySaved();
-        }
-        articlePageObject.closeArticle();
-
-        searchPageObject.initSearchInput();
-        searchPageObject.typeSearchLine("Python");
-        searchPageObject.clickByArticleWithSubstring(second_title);
-
-        if (Platform.getInstance().isAndroid()) {
-            articlePageObject.addArticleIntoExistingMyList(folder_name);
-        } else {
-            articlePageObject.addArticlesToMySaved();
-        }
-        articlePageObject.closeArticle();
-
-        NavigationUI navigationUI = NavigationUIFactory.get(driver);
-        navigationUI.clickMyLists();
-
-        MyListsPageObject myListsPageObject = MyListsPageObjectFactory.get(driver);
-        if (Platform.getInstance().isAndroid()) {
-            myListsPageObject.openFolderByName(folder_name);
-        }
-        myListsPageObject.swipeByArticleToDelete(first_title);
-        myListsPageObject.waitForArticleToAppearByTitle(second_title);
-        myListsPageObject.openArticleByTitle(second_title);
-
-        WebElement title_element = articlePageObject.waitForTitleElement();
-
-        assertEquals(
-                second_title,
-                title_element.getAttribute("text"),
-                "Article title do not match"
-        );
-    }
 }
