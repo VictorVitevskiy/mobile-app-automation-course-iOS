@@ -6,13 +6,10 @@ import factories.NavigationUIFactory;
 import factories.SearchPageObjectFactory;
 import lib.Platform;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.WebElement;
 import pages.ArticlePageObject;
 import pages.MyListsPageObject;
 import pages.NavigationUI;
 import pages.SearchPageObject;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class MyListsTests extends CoreTestCase {
 
