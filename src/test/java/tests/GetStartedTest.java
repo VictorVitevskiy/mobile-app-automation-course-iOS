@@ -1,14 +1,18 @@
 package tests;
 
+import lib.Platform;
 import org.junit.jupiter.api.Test;
-import pages.WelcomePageObject;
+import pages.WelcomeIOSPageObject;
 
 public class GetStartedTest extends CoreTestCase {
 
     @Test
     public void testPassThroughWelcome() {
 
-        WelcomePageObject welcomePage = new WelcomePageObject(driver);
+        if (Platform.getInstance().isAndroid()) {
+            return;
+        }
+        WelcomeIOSPageObject welcomePage = new WelcomeIOSPageObject(driver);
         welcomePage.waitForLearnMoreLink();
         welcomePage.clickSkipButton();
     }

@@ -1,21 +1,25 @@
 package pages;
 
 import io.appium.java_client.AppiumDriver;
-import org.openqa.selenium.By;
+import io.appium.java_client.TouchAction;
+import io.appium.java_client.touch.offset.PointOption;
+import lib.Platform;
 import org.openqa.selenium.WebElement;
 
-public class ArticlePageObject extends MainPageObject{
+public abstract class ArticlePageObject extends MainPageObject {
 
-    public static final String
-            TITLE = "id:org.wikipedia:id/view_page_title_text",
-            FOOTER_ELEMENT = "xpath://*[@text='View page in browser']",
-            OPTIONS_BUTTON = "id:More options",
-            OPTIONS_ADD_TO_MY_LIST_BUTTON = "xpath://*[contains(@text,'Add to reading list')]",
-            ADD_TO_MY_LIST_OVERLAY = "id:org.wikipedia:id/onboarding_button",
-            MY_LIST_NAME_INPUT = "id:org.wikipedia:id/text_input",
-            MY_LIST_OK_BUTTON = "id:android:id/button1",
-            CLOSE_ARTICLE_BUTTON = "id:Navigate up",
-            FOLDER_BY_NAME_TPL = "xpath://*[@text='{FOLDER_NAME}']";
+    protected static String
+            TITLE,
+            TITLE_TPL,
+            FOOTER_ELEMENT,
+            OPTIONS_BUTTON,
+            OPTIONS_ADD_TO_MY_LIST_BUTTON,
+            ADD_TO_MY_LIST_OVERLAY,
+            MY_LIST_NAME_INPUT,
+            MY_LIST_OK_BUTTON,
+            CLOSE_ARTICLE_BUTTON,
+            SYNC_YOUR_SAVED_ARTICLES_CLOSE_BUTTON,
+            FOLDER_BY_NAME_TPL;
 
     public ArticlePageObject(AppiumDriver<?> driver) {
         super(driver);
@@ -30,27 +34,60 @@ public class ArticlePageObject extends MainPageObject{
         );
     }
 
+    public WebElement waitForTitleElement(String name_of_title) {
+
+        String title_xpath = getTitleByName(name_of_title);
+
+        return this.waitForElementPresent(
+                title_xpath,
+                "Cannot find article title on page",
+                15
+        );
+    }
+
     public String getArticleTitle() {
 
         WebElement title_element = waitForTitleElement();
-        return title_element.getAttribute("text");
+        return title_element.getAttribute("name");
     }
 
-    public void checkArticleTitlePresent() {
+    public void checkArticleTitlePresent(String name_of_title) {
 
-        this.assertElementPresent(
-                TITLE,
-                "Cannot find article title"
-        );
+        if (Platform.getInstance().isAndroid()) {
+            this.assertElementPresent(
+                    TITLE,
+                    "Cannot find article title"
+            );
+        } else {
+            String title_xpath = getTitleByName(name_of_title);
+            waitForElementPresent(
+                    title_xpath,
+                    "Cannot find article title",
+                    15
+            );
+            this.assertElementPresent(
+                    title_xpath,
+                    "Cannot find article title"
+            );
+        }
     }
 
     public void swipeToFooter() {
 
-        this.swipeUpToFindElement(
-                FOOTER_ELEMENT,
-                "cannot find the end of article",
-                20
-        );
+        if (Platform.getInstance().isAndroid()) {
+            this.swipeUpToFindElement(
+                    FOOTER_ELEMENT,
+                    "Cannot find the end of article",
+                    20
+            );
+        } else {
+            this.swipeUpTillElementAppear(
+                    FOOTER_ELEMENT,
+                    "Cannot find the end of article",
+                    20
+            );
+        }
+
     }
 
     public void addArticleToMyListForTheFirstTime(String name_of_folder) {
@@ -92,6 +129,7 @@ public class ArticlePageObject extends MainPageObject{
                 10
         );
     }
+
     public void addArticleIntoExistingMyList(String name_of_folder) {
 
         this.waitForElementAndClick(
@@ -114,6 +152,31 @@ public class ArticlePageObject extends MainPageObject{
         );
     }
 
+    public void addArticlesToMySaved() {
+
+        TouchAction<?> action = new TouchAction<>(driver);
+
+        int screen_size_by_y = driver.manage().window().getSize().getHeight();
+        int screen_size_by_x = driver.manage().window().getSize().getWidth();
+
+        action
+                .press(PointOption.point(screen_size_by_x/2, screen_size_by_y/2))
+                .release()
+                .perform();
+
+        this.waitForElementAndClick(
+                OPTIONS_ADD_TO_MY_LIST_BUTTON,
+                "Cannot find option to add article to reading list",
+                15
+        );
+
+        this.waitForElementAndClick(
+                SYNC_YOUR_SAVED_ARTICLES_CLOSE_BUTTON,
+                "Cannot find close sync your saved articles button",
+                15
+        );
+    }
+
     public void closeArticle() {
 
         this.waitForElementAndClick(
@@ -125,5 +188,10 @@ public class ArticlePageObject extends MainPageObject{
 
     private static String getFolderByName(String name_of_folder) {
         return FOLDER_BY_NAME_TPL.replace("{FOLDER_NAME}", name_of_folder);
+    }
+
+    private static String getTitleByName(String name_of_title) {
+
+        return TITLE_TPL.replace("{SUBSTRING}", name_of_title);
     }
 }

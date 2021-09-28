@@ -1,33 +1,23 @@
 package tests;
 
 import io.appium.java_client.AppiumDriver;
-import io.appium.java_client.ios.IOSDriver;
+import lib.Platform;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.openqa.selenium.ScreenOrientation;
-import org.openqa.selenium.remote.DesiredCapabilities;
+import pages.WelcomeIOSPageObject;
 
-import java.net.URL;
 import java.time.Duration;
 
 public class CoreTestCase {
 
     protected AppiumDriver<?> driver;
-    private static final String APPIUM_URL = "http://127.0.0.1:4723/wd/hub";
 
     @BeforeEach
     protected void setUp() throws Exception {
 
-        DesiredCapabilities capabilities = new DesiredCapabilities();
-
-        capabilities.setCapability("platformName", "iOS");
-        capabilities.setCapability("deviceName", "iPhone SE (2nd generation)");
-        capabilities.setCapability("platformVersion", "14.3");
-        capabilities.setCapability("automationName", "XCUITest");
-        capabilities.setCapability("app", "/Users/z19223188/IdeaProjects/mobile-app-automation-course-iOS/apps/Wikipedia.app");
-        capabilities.setCapability("orientation", "PORTRAIT");
-
-        driver = new IOSDriver<>(new URL(APPIUM_URL), capabilities);
+        driver = Platform.getInstance().getDriver();
+        this.skipWelcomePageForIOSPApp();
     }
 
     @AfterEach
@@ -49,5 +39,13 @@ public class CoreTestCase {
 
     protected void backgroundUp (Duration seconds) {
         driver.runAppInBackground(seconds);
+    }
+
+    private void skipWelcomePageForIOSPApp() {
+
+        if (Platform.getInstance().isIOS()) {
+            WelcomeIOSPageObject welcomeIOSPageObject = new WelcomeIOSPageObject(driver);
+            welcomeIOSPageObject.clickSkipButton();
+        }
     }
 }

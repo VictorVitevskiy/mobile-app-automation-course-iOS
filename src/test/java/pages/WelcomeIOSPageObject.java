@@ -1,15 +1,14 @@
 package pages;
 
 import io.appium.java_client.AppiumDriver;
-import org.openqa.selenium.By;
 
-public class WelcomePageObject extends MainPageObject {
+public class WelcomeIOSPageObject extends MainPageObject {
 
     public static final String
             LEARN_MORE_LINK = "id:Learn more about Wikipedia",
             SKIP_LINK = "id:Skip";
 
-    public WelcomePageObject(AppiumDriver<?> driver) {
+    public WelcomeIOSPageObject(AppiumDriver<?> driver) {
         super(driver);
     }
 

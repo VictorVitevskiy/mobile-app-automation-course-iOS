@@ -1,15 +1,16 @@
 package pages;
 
 import io.appium.java_client.AppiumDriver;
-import org.openqa.selenium.By;
+import lib.Platform;
 
-public class MyListsPageObject extends MainPageObject{
+public abstract class MyListsPageObject extends MainPageObject {
 
-    public static final String
-            FOLDER_BY_NAME_TPL = "xpath://*[@text='{FOLDER_NAME}']",
-            ARTICLE_BY_TITLE_TPL = "xpath://*[@text='{TITLE}']";
+    protected static String
+            FOLDER_BY_NAME_TPL,
+            ARTICLE_BY_TITLE_TPL,
+            ELEMENT_TO_DELETE_ARTICLE;
 
-    public MyListsPageObject(AppiumDriver driver) {
+    public MyListsPageObject(AppiumDriver<?> driver) {
         super(driver);
     }
 
@@ -37,18 +38,22 @@ public class MyListsPageObject extends MainPageObject{
 
         this.waitForArticleToAppearByTitle(article_title);
 
-        String article_xpath = getFolderByName(article_title);
+        String article_xpath = getSavedArticleByTitle(article_title);
         this.swipeElementToLeft(
                 article_xpath,
                 "Cannot find saved article"
         );
+
+        if (Platform.getInstance().isIOS()) {
+            this.clickTrashBinElementToDeleteSavedArticle(ELEMENT_TO_DELETE_ARTICLE, "Cannot find element 'Trash bin'");
+        }
 
         this.waitForArticleToDisappearByTitle(article_title);
     }
 
     public void waitForArticleToDisappearByTitle(String article_title) {
 
-        String article_xpath = getFolderByName(article_title);
+        String article_xpath = getSavedArticleByTitle(article_title);
         this.waitForElementNotPresent(
                 article_xpath,
                 "Saved article still present with title " + article_title,
@@ -58,7 +63,7 @@ public class MyListsPageObject extends MainPageObject{
 
     public void waitForArticleToAppearByTitle(String article_title) {
 
-        String article_xpath = getFolderByName(article_title);
+        String article_xpath = getSavedArticleByTitle(article_title);
         this.waitForElementPresent(
                 article_xpath,
                 "Cannot find saved article by title " + article_title,

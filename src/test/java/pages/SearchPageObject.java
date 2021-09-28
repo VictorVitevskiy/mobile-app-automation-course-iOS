@@ -1,21 +1,24 @@
 package pages;
 
 import io.appium.java_client.AppiumDriver;
-import org.junit.jupiter.api.Assertions;
-import org.openqa.selenium.By;
+import lib.Platform;
 import org.openqa.selenium.WebElement;
 
-public class SearchPageObject extends MainPageObject{
+import java.util.Locale;
 
-    private static final String
-            SEARCH_INIT_ELEMENT = "xpath://*[contains(@text,'Search Wikipedia')]",
-            SEARCH_INPUT = "xpath://*[contains(@text,'Search…')]",
-            SEARCH_CANCEL_BUTTON = "id:org.wikipedia:id/search_close_btn",
-            SEARCH_RESULT_BY_SUBSTRING_TPL = "xpath://*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='{SUBSTRING}']",
-            SEARCH_RESULT_ELEMENT = "xpath://*[@resource-id='org.wikipedia:id/search_results_list']/*[@resource-id='org.wikipedia:id/page_list_item_container']",
-            SEARCH_RESULT_ELEMENT_BY_ORDER_TPL = "xpath://android.widget.LinearLayout[{NUMBER}][@resource-id='org.wikipedia:id/page_list_item_container']//android.widget.TextView[1]",
-            SEARCH_EMPTY_RESULT_ELEMENT = "xpath://*[@text='No results found']",
-            SEARCH_RESULT_BY_TITLE_AND_DESCRIPTION_TPL = "xpath://*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='{TITLE}']/..//*[@text='{DESCRIPTION}']";
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+public abstract class SearchPageObject extends MainPageObject {
+
+    protected static String
+            SEARCH_INIT_ELEMENT,
+            SEARCH_INPUT,
+            SEARCH_CANCEL_BUTTON,
+            SEARCH_RESULT_BY_SUBSTRING_TPL,
+            SEARCH_RESULT_ELEMENT,
+            SEARCH_RESULT_ELEMENT_BY_ORDER_TPL,
+            SEARCH_EMPTY_RESULT_ELEMENT,
+            SEARCH_RESULT_BY_TITLE_AND_DESCRIPTION_TPL;
 
     public SearchPageObject(AppiumDriver<?> driver) {
         super(driver);
@@ -78,11 +81,18 @@ public class SearchPageObject extends MainPageObject{
                 10
         );
 
-        this.assertElementHasText(
-                SEARCH_INPUT,
-                search_line,
-                "Cannot find expected text in entry field"
-        );
+        if (Platform.getInstance().isAndroid()) {
+            this.assertElementHasText(
+                    SEARCH_INPUT,
+                    search_line,
+                    "Cannot find expected text in entry field"
+            );
+        } else {
+            assertElementPresent(
+                    SEARCH_INPUT,
+                    "Cannot find expected element"
+            );
+        }
     }
 
     public void waitForSearchResult(String substring) {
@@ -148,7 +158,7 @@ public class SearchPageObject extends MainPageObject{
                 10
         );
 
-        int articles_number = driver.findElements(By.xpath(SEARCH_RESULT_ELEMENT)).size();
+        int articles_number = driver.findElements(getLocatorByString(SEARCH_RESULT_ELEMENT)).size();
         int number = 0;
 
         while (articles_number > number) {
@@ -159,15 +169,39 @@ public class SearchPageObject extends MainPageObject{
                     "Search element not found"
             );
 
-            Assertions.assertTrue(
-                    element.getAttribute("text").contains(search_text),
-                    "Search result does not contain the search word "
+            assertTrue(
+                    element.getAttribute("name").toLowerCase(Locale.ROOT)
+                            .contains(search_text.toLowerCase(Locale.ROOT)),
+                    "Search result does not contain the search word"
             );
         }
     }
 
+    public void assertSearchResultsPresent() {
+
+        this.assertElementPresent(
+                SEARCH_RESULT_ELEMENT,
+                "Found one or zero articles"
+        );
+    }
+
+    public void assertSearchResultsNotPresent() {
+
+        this.assertElementNotPresent(
+                SEARCH_RESULT_ELEMENT,
+                "Articles are still on the page"
+        );
+
+//        assertEquals(
+//                0,
+//                driver.findElements(By.id("org.wikipedia:id/page_list_item_container")).size(),
+//                "Articles are still on the page "
+//        );
+    }
+
     /**
-     * TEMPLATEs METHOD
+     * TEMPLATES METHODS
+     *
      * @param substring
      * @return
      */
@@ -180,6 +214,6 @@ public class SearchPageObject extends MainPageObject{
     }
 
     private static String getResultSearchElementByTitleAndDescription(String title, String description) {
-        return SEARCH_RESULT_BY_TITLE_AND_DESCRIPTION_TPL.replace("{TITLE}",title).replace("{DESCRIPTION}", description);
+        return SEARCH_RESULT_BY_TITLE_AND_DESCRIPTION_TPL.replace("{TITLE}", title).replace("{DESCRIPTION}", description);
     }
 }
