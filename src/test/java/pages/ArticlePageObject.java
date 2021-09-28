@@ -152,7 +152,7 @@ public abstract class ArticlePageObject extends MainPageObject {
         );
     }
 
-    public void addArticlesToMySaved() {
+    public void addArticlesToMySavedForTheFirstTime() {
 
         TouchAction<?> action = new TouchAction<>(driver);
 
@@ -164,15 +164,20 @@ public abstract class ArticlePageObject extends MainPageObject {
                 .release()
                 .perform();
 
-        this.waitForElementAndClick(
-                OPTIONS_ADD_TO_MY_LIST_BUTTON,
-                "Cannot find option to add article to reading list",
-                15
-        );
+        this.addArticlesToMySaved();
 
         this.waitForElementAndClick(
                 SYNC_YOUR_SAVED_ARTICLES_CLOSE_BUTTON,
                 "Cannot find close sync your saved articles button",
+                15
+        );
+    }
+
+    public void addArticlesToMySaved() {
+
+        this.waitForElementAndClick(
+                OPTIONS_ADD_TO_MY_LIST_BUTTON,
+                "Cannot find option to add article to reading list",
                 15
         );
     }

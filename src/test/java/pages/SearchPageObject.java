@@ -65,6 +65,12 @@ public abstract class SearchPageObject extends MainPageObject {
 
     public void typeSearchLine(String search_line) {
 
+        this.waitForElementAndClear(
+                SEARCH_INPUT,
+                "Cannot find and type into search init",
+                10
+        );
+
         this.waitForElementAndSendKeys(
                 SEARCH_INPUT,
                 search_line,
