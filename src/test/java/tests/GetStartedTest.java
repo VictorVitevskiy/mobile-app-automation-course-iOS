@@ -1,12 +1,14 @@
 package tests;
 
 import lib.Platform;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import pages.WelcomeIOSPageObject;
 
 public class GetStartedTest extends CoreTestCase {
 
     @Test
+    @Disabled
     public void testPassThroughWelcome() {
 
         if (Platform.getInstance().isAndroid()) {

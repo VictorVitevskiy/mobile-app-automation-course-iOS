@@ -3,6 +3,7 @@ package tests;
 import factories.ArticlePageObjectFactory;
 import factories.SearchPageObjectFactory;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledIfEnvironmentVariable;
 import pages.ArticlePageObject;
 import pages.SearchPageObject;
 
@@ -12,6 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class ChangeAppConditionTests extends CoreTestCase {
 
     @Test
+    @DisabledIfEnvironmentVariable(named = "PLATFORM", matches = "ios")
     public void testChangeScreenOrientationOnSearchResults() {
 
         SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);

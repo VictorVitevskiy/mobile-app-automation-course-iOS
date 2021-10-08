@@ -26,7 +26,7 @@ public class MyListsTests extends CoreTestCase {
         searchPageObject.clickByArticleWithSubstring(article_title);
 
         ArticlePageObject articlePageObject = ArticlePageObjectFactory.get(driver);
-        articlePageObject.waitForTitleElement();
+//        articlePageObject.waitForTitleElement();
 
         if (Platform.getInstance().isAndroid()) {
             articlePageObject.addArticleToMyListForTheFirstTime(folder_name);
@@ -36,7 +36,6 @@ public class MyListsTests extends CoreTestCase {
         articlePageObject.closeArticle();
 
         NavigationUI navigationUI = NavigationUIFactory.get(driver);
-        Thread.sleep(2000);
         navigationUI.clickMyLists();
 
         MyListsPageObject myListsPageObject = MyListsPageObjectFactory.get(driver);

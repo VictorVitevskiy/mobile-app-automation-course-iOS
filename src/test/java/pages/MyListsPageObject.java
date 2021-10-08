@@ -20,7 +20,7 @@ public abstract class MyListsPageObject extends MainPageObject {
         this.waitForElementAndClick(
                 folder_name_after,
                 "Cannot find folder by name " + folder_name,
-                10
+                30
         );
     }
 
@@ -30,7 +30,7 @@ public abstract class MyListsPageObject extends MainPageObject {
         this.waitForElementAndClick(
                 article_xpath,
                 "Cannot find folder by name " + article_title,
-                10
+                30
         );
     }
 
@@ -57,7 +57,7 @@ public abstract class MyListsPageObject extends MainPageObject {
         this.waitForElementNotPresent(
                 article_xpath,
                 "Saved article still present with title " + article_title,
-                15
+                30
         );
     }
 
@@ -67,7 +67,7 @@ public abstract class MyListsPageObject extends MainPageObject {
         this.waitForElementPresent(
                 article_xpath,
                 "Cannot find saved article by title " + article_title,
-                15
+                30
         );
     }
 
