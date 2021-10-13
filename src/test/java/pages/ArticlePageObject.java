@@ -210,11 +210,6 @@ public abstract class ArticlePageObject extends MainPageObject {
                     "Cannot click button to remove an article from saved",
                     15
             );
-            this.waitForElementPresent(
-                    OPTIONS_ADD_TO_MY_LIST_BUTTON,
-                    "Cannot find button to add an article to save list after removing it from this list before",
-                    15
-            );
         }
     }
 

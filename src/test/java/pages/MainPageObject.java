@@ -249,7 +249,7 @@ public class MainPageObject {
                 this.waitForElementAndClick(
                         locator,
                         error_message,
-                        1
+                        10
                 );
                 need_more_attempts = false;
             } catch (Exception exception) {
@@ -257,7 +257,7 @@ public class MainPageObject {
                     this.waitForElementAndClick(
                             locator,
                             error_message,
-                            1
+                            10
                     );
                 }
             }

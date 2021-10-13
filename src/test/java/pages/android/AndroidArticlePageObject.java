@@ -7,7 +7,7 @@ public class AndroidArticlePageObject extends ArticlePageObject {
 
     static {
         TITLE = "id:org.wikipedia:id/view_page_title_text";
-        TITLE_TPL = "xpath://*[@resource-id='org.wikipedia:id/page_header_view']//android.widget.TextView[contains(@text,'{SUBSTRING}}')]";
+        TITLE_TPL = "xpath://*[@resource-id='org.wikipedia:id/page_header_view']//android.widget.TextView[contains(@text,'{SUBSTRING}')]";
         FOOTER_ELEMENT = "xpath://*[@text='View page in browser']";
         OPTIONS_BUTTON = "xpath://*[@content-desc='More options']";
         OPTIONS_ADD_TO_MY_LIST_BUTTON = "xpath://*[contains(@text,'Add to reading list')]";

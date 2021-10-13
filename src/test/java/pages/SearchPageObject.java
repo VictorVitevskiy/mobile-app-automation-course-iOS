@@ -126,7 +126,7 @@ public abstract class SearchPageObject extends MainPageObject {
         String search_result_xpath = getResultSearchElementByTitle(substring);
         this.waitForElementAndClick(
                 search_result_xpath,
-                "Cannot find and click search result with substring " + substring,
+                "Cannot find and click search result with title " + substring,
                 10
         );
     }

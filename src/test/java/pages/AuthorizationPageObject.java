@@ -22,7 +22,7 @@ public class AuthorizationPageObject extends MainPageObject {
                 "Cannot find Authorization button",
                 15
         );
-        this.waitForElementAndClick(
+        this.tryClickElementWithFewAttempts(
                 LOGIN_BUTTON,
                 "Cannot click Authorization button",
                 15

@@ -17,7 +17,6 @@ public class ArticleTests extends CoreTestCase {
     public void testCompareArticleTitle() {
 
         SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
-
         searchPageObject.initSearchInput();
         searchPageObject.typeSearchLine("Java");
         searchPageObject.clickByArticleWithSubstring("Object-oriented programming language");

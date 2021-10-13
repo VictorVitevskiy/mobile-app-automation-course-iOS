@@ -15,7 +15,7 @@ public class MyListsTests extends CoreTestCase {
     private static final String folder_name = "Learning programming";
     private static final String
             LOGIN = "Vitorpg1992",
-            PASSWORD = "Vit199@2411";
+            PASSWORD = "Vit19922411";
 
     @Test
     public void testSaveFirstArticleToMyList() throws InterruptedException {
@@ -25,10 +25,9 @@ public class MyListsTests extends CoreTestCase {
         SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
         searchPageObject.initSearchInput();
         searchPageObject.typeSearchLine(article_title);
-        searchPageObject.clickByArticleWithSubstring(article_title);
+        searchPageObject.clickByArticleWithTitle(article_title);
 
         ArticlePageObject articlePage = ArticlePageObjectFactory.get(driver);
-//        articlePage.waitForTitleElement();
 
         if (Platform.getInstance().isAndroid()) {
             articlePage.addArticleToMyListForTheFirstTime(folder_name);
@@ -36,6 +35,7 @@ public class MyListsTests extends CoreTestCase {
             articlePage.addArticlesToMySavedForTheFirstTime();
         } else {
             articlePage.addArticlesToMySaved();
+            Thread.sleep(1000);
             AuthorizationPageObject authorizationPage = new AuthorizationPageObject(driver);
             authorizationPage.clickAuthorizationButton();
             authorizationPage.enterLoginData(LOGIN, PASSWORD);
@@ -61,45 +61,5 @@ public class MyListsTests extends CoreTestCase {
         myListsPageObject.swipeByArticleToDelete(article_title);
     }
 
-    @Test
-    public void testSaveTwoArticlesToMyList() {
 
-        String folder_name = "Learning programming";
-        String first_title = "Java (programming language)";
-        String second_title = "Python (programming language)";
-
-        SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
-        searchPageObject.initSearchInput();
-        searchPageObject.typeSearchLine("Java");
-        searchPageObject.clickByArticleWithSubstring(first_title);
-
-        ArticlePageObject articlePageObject = ArticlePageObjectFactory.get(driver);
-        if (Platform.getInstance().isAndroid()) {
-            articlePageObject.addArticleToMyListForTheFirstTime(folder_name);
-        } else {
-            articlePageObject.addArticlesToMySavedForTheFirstTime();
-        }
-        articlePageObject.closeArticle();
-
-        searchPageObject.initSearchInput();
-        searchPageObject.typeSearchLine("Python");
-        searchPageObject.clickByArticleWithSubstring(second_title);
-
-        if (Platform.getInstance().isAndroid()) {
-            articlePageObject.addArticleIntoExistingMyList(folder_name);
-        } else {
-            articlePageObject.addArticlesToMySaved();
-        }
-        articlePageObject.closeArticle();
-
-        NavigationUI navigationUI = NavigationUIFactory.get(driver);
-        navigationUI.clickMyLists();
-
-        MyListsPageObject myListsPageObject = MyListsPageObjectFactory.get(driver);
-        if (Platform.getInstance().isAndroid()) {
-            myListsPageObject.openFolderByName(folder_name);
-        }
-        myListsPageObject.swipeByArticleToDelete(first_title);
-        myListsPageObject.waitForArticleToAppearByTitle(second_title);
-    }
 }
