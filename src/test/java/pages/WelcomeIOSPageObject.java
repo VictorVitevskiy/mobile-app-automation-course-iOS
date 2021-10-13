@@ -1,14 +1,14 @@
 package pages;
 
-import io.appium.java_client.AppiumDriver;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
 public class WelcomeIOSPageObject extends MainPageObject {
 
-    public static final String
+    private static final String
             LEARN_MORE_LINK = "id:Learn more about Wikipedia",
             SKIP_LINK = "id:Skip";
 
-    public WelcomeIOSPageObject(AppiumDriver<?> driver) {
+    public WelcomeIOSPageObject(RemoteWebDriver driver) {
         super(driver);
     }
 

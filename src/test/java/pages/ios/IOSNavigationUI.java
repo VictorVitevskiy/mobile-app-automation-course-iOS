@@ -1,6 +1,6 @@
 package pages.ios;
 
-import io.appium.java_client.AppiumDriver;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import pages.NavigationUI;
 
 public class IOSNavigationUI extends NavigationUI {
@@ -9,7 +9,7 @@ public class IOSNavigationUI extends NavigationUI {
         MY_LISTS_LINK = "id:Saved";
     }
 
-    public IOSNavigationUI(AppiumDriver<?> driver) {
+    public IOSNavigationUI(RemoteWebDriver driver) {
         super(driver);
     }
 }

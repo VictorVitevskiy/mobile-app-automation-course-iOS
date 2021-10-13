@@ -1,6 +1,6 @@
 package pages.ios;
 
-import io.appium.java_client.AppiumDriver;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import pages.ArticlePageObject;
 
 public class IOSArticlePageObject extends ArticlePageObject {
@@ -14,7 +14,7 @@ public class IOSArticlePageObject extends ArticlePageObject {
         SYNC_YOUR_SAVED_ARTICLES_CLOSE_BUTTON = "id:places auth close";
     }
 
-    public IOSArticlePageObject(AppiumDriver<?> driver) {
+    public IOSArticlePageObject(RemoteWebDriver driver) {
         super(driver);
     }
 }

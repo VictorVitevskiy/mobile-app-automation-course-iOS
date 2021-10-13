@@ -1,16 +1,17 @@
 package pages;
 
-import io.appium.java_client.AppiumDriver;
 import lib.Platform;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
 public abstract class MyListsPageObject extends MainPageObject {
 
     protected static String
             FOLDER_BY_NAME_TPL,
             ARTICLE_BY_TITLE_TPL,
+            REMOVE_FROM_SAVED_BUTTON,
             ELEMENT_TO_DELETE_ARTICLE;
 
-    public MyListsPageObject(AppiumDriver<?> driver) {
+    public MyListsPageObject(RemoteWebDriver driver) {
         super(driver);
     }
 
@@ -39,15 +40,25 @@ public abstract class MyListsPageObject extends MainPageObject {
         this.waitForArticleToAppearByTitle(article_title);
 
         String article_xpath = getSavedArticleByTitle(article_title);
-        this.swipeElementToLeft(
-                article_xpath,
-                "Cannot find saved article"
-        );
 
+        if (!Platform.getInstance().isMobileWeb()) {
+            this.swipeElementToLeft(
+                    article_xpath,
+                    "Cannot find saved article"
+            );
+        } else {
+            String remove_locator = getRemoveButtonByTitle(article_title);
+            this.waitForElementAndClick(
+                    remove_locator,
+                    "Cannot click button to remove article from saved",
+                    15
+            );
+        }
         if (Platform.getInstance().isIOS()) {
             this.clickTrashBinElementToDeleteSavedArticle(ELEMENT_TO_DELETE_ARTICLE, "Cannot find element 'Trash bin'");
+        } else if (Platform.getInstance().isMobileWeb()) {
+            driver.navigate().refresh();
         }
-
         this.waitForArticleToDisappearByTitle(article_title);
     }
 
@@ -77,5 +88,9 @@ public abstract class MyListsPageObject extends MainPageObject {
 
     private static String getSavedArticleByTitle(String article_title) {
         return ARTICLE_BY_TITLE_TPL.replace("{TITLE}", article_title);
+    }
+
+    private static String getRemoveButtonByTitle(String article_title) {
+        return REMOVE_FROM_SAVED_BUTTON.replace("{TITLE}", article_title);
     }
 }

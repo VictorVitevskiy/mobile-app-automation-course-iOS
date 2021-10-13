@@ -14,4 +14,5 @@ import tests.SearchTests;
         MyListsTests.class,
         SearchTests.class
 })
-public class SuiteDemo {}
+public class SuiteDemo {
+}

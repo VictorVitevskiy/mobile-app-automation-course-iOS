@@ -14,5 +14,9 @@
 /idea/
 */idea/*
 
+**/apps/
+/apps/
+*/apps/*
+
 mobile-app-automation-course-iOS.iml
 

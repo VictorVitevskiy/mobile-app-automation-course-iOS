@@ -1,12 +1,13 @@
 package pages.android;
 
-import io.appium.java_client.AppiumDriver;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import pages.ArticlePageObject;
 
 public class AndroidArticlePageObject extends ArticlePageObject {
 
     static {
         TITLE = "id:org.wikipedia:id/view_page_title_text";
+        TITLE_TPL = "xpath://*[@resource-id='org.wikipedia:id/page_header_view']//android.widget.TextView[contains(@text,'{SUBSTRING}}')]";
         FOOTER_ELEMENT = "xpath://*[@text='View page in browser']";
         OPTIONS_BUTTON = "xpath://*[@content-desc='More options']";
         OPTIONS_ADD_TO_MY_LIST_BUTTON = "xpath://*[contains(@text,'Add to reading list')]";
@@ -17,7 +18,7 @@ public class AndroidArticlePageObject extends ArticlePageObject {
         FOLDER_BY_NAME_TPL = "xpath://*[@text='{FOLDER_NAME}']";
     }
 
-    public AndroidArticlePageObject(AppiumDriver<?> driver) {
+    public AndroidArticlePageObject(RemoteWebDriver driver) {
         super(driver);
     }
 }

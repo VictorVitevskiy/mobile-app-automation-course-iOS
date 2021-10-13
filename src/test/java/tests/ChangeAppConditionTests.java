@@ -2,6 +2,7 @@ package tests;
 
 import factories.ArticlePageObjectFactory;
 import factories.SearchPageObjectFactory;
+import lib.CoreTestCase;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.DisabledIfEnvironmentVariable;
 import pages.ArticlePageObject;
@@ -10,6 +11,7 @@ import pages.SearchPageObject;
 import static java.time.Duration.ofSeconds;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@DisabledIfEnvironmentVariable(named = "PLATFORM", matches = "mobile_web")
 public class ChangeAppConditionTests extends CoreTestCase {
 
     @Test

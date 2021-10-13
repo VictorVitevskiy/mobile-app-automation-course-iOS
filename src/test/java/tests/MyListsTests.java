@@ -4,16 +4,18 @@ import factories.ArticlePageObjectFactory;
 import factories.MyListsPageObjectFactory;
 import factories.NavigationUIFactory;
 import factories.SearchPageObjectFactory;
+import lib.CoreTestCase;
 import lib.Platform;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import pages.ArticlePageObject;
-import pages.MyListsPageObject;
-import pages.NavigationUI;
-import pages.SearchPageObject;
+import pages.*;
 
 public class MyListsTests extends CoreTestCase {
 
-    public static final String folder_name = "Learning programming";
+    private static final String folder_name = "Learning programming";
+    private static final String
+            LOGIN = "Vitorpg1992",
+            PASSWORD = "Vit199@2411";
 
     @Test
     public void testSaveFirstArticleToMyList() throws InterruptedException {
@@ -25,17 +27,31 @@ public class MyListsTests extends CoreTestCase {
         searchPageObject.typeSearchLine(article_title);
         searchPageObject.clickByArticleWithSubstring(article_title);
 
-        ArticlePageObject articlePageObject = ArticlePageObjectFactory.get(driver);
-//        articlePageObject.waitForTitleElement();
+        ArticlePageObject articlePage = ArticlePageObjectFactory.get(driver);
+//        articlePage.waitForTitleElement();
 
         if (Platform.getInstance().isAndroid()) {
-            articlePageObject.addArticleToMyListForTheFirstTime(folder_name);
+            articlePage.addArticleToMyListForTheFirstTime(folder_name);
+        } else if (Platform.getInstance().isIOS()){
+            articlePage.addArticlesToMySavedForTheFirstTime();
         } else {
-            articlePageObject.addArticlesToMySavedForTheFirstTime();
+            articlePage.addArticlesToMySaved();
+            AuthorizationPageObject authorizationPage = new AuthorizationPageObject(driver);
+            authorizationPage.clickAuthorizationButton();
+            authorizationPage.enterLoginData(LOGIN, PASSWORD);
+            authorizationPage.submitForm();
+
+            Assertions.assertEquals(
+                    article_title,
+                    articlePage.getArticleTitle(),
+                    "We are not on the same page after login."
+            );
+            articlePage.addArticlesToMySaved();
         }
-        articlePageObject.closeArticle();
+        articlePage.closeArticle();
 
         NavigationUI navigationUI = NavigationUIFactory.get(driver);
+        navigationUI.openNavigation();
         navigationUI.clickMyLists();
 
         MyListsPageObject myListsPageObject = MyListsPageObjectFactory.get(driver);

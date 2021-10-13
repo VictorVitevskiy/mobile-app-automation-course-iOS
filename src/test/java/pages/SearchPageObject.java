@@ -1,8 +1,8 @@
 package pages;
 
-import io.appium.java_client.AppiumDriver;
 import lib.Platform;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.util.Locale;
 
@@ -15,12 +15,13 @@ public abstract class SearchPageObject extends MainPageObject {
             SEARCH_INPUT,
             SEARCH_CANCEL_BUTTON,
             SEARCH_RESULT_BY_SUBSTRING_TPL,
+            SEARCH_RESULT_BY_TITLE_TPL,
             SEARCH_RESULT_ELEMENT,
             SEARCH_RESULT_ELEMENT_BY_ORDER_TPL,
             SEARCH_EMPTY_RESULT_ELEMENT,
             SEARCH_RESULT_BY_TITLE_AND_DESCRIPTION_TPL;
 
-    public SearchPageObject(AppiumDriver<?> driver) {
+    public SearchPageObject(RemoteWebDriver driver) {
         super(driver);
     }
 
@@ -103,7 +104,7 @@ public abstract class SearchPageObject extends MainPageObject {
 
     public void waitForSearchResult(String substring) {
 
-        String search_result_xpath = getResultSearchElement(substring);
+        String search_result_xpath = getResultSearchElementByDescription(substring);
         this.waitForElementPresent(
                 search_result_xpath,
                 "Cannot find search result with substring " + substring
@@ -112,7 +113,17 @@ public abstract class SearchPageObject extends MainPageObject {
 
     public void clickByArticleWithSubstring(String substring) {
 
-        String search_result_xpath = getResultSearchElement(substring);
+        String search_result_xpath = getResultSearchElementByDescription(substring);
+        this.waitForElementAndClick(
+                search_result_xpath,
+                "Cannot find and click search result with substring " + substring,
+                10
+        );
+    }
+
+    public void clickByArticleWithTitle(String substring) {
+
+        String search_result_xpath = getResultSearchElementByTitle(substring);
         this.waitForElementAndClick(
                 search_result_xpath,
                 "Cannot find and click search result with substring " + substring,
@@ -175,11 +186,19 @@ public abstract class SearchPageObject extends MainPageObject {
                     "Search element not found"
             );
 
-            assertTrue(
-                    element.getAttribute("name").toLowerCase(Locale.ROOT)
-                            .contains(search_text.toLowerCase(Locale.ROOT)),
-                    "Search result does not contain the search word"
-            );
+            if (!Platform.getInstance().isMobileWeb()) {
+                assertTrue(
+                        element.getAttribute("name").toLowerCase(Locale.ROOT)
+                                .contains(search_text.toLowerCase(Locale.ROOT)),
+                        "Search result does not contain the search word"
+                );
+            } else {
+                assertTrue(
+                        element.getAttribute("title").toLowerCase(Locale.ROOT)
+                                .contains(search_text.toLowerCase(Locale.ROOT)),
+                        "Search result does not contain the search word"
+                );
+            }
         }
     }
 
@@ -211,8 +230,12 @@ public abstract class SearchPageObject extends MainPageObject {
      * @param substring
      * @return
      */
-    private static String getResultSearchElement(String substring) {
+    private static String getResultSearchElementByDescription(String substring) {
         return SEARCH_RESULT_BY_SUBSTRING_TPL.replace("{SUBSTRING}", substring);
+    }
+
+    private static String getResultSearchElementByTitle(String substring) {
+        return SEARCH_RESULT_BY_TITLE_TPL.replace("{SUBSTRING}", substring);
     }
 
     private static String getSearchElementByOrder(String substring) {

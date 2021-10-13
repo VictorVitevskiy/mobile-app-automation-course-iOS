@@ -5,6 +5,7 @@ import io.appium.java_client.TouchAction;
 import io.appium.java_client.touch.offset.PointOption;
 import lib.Platform;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
 public abstract class ArticlePageObject extends MainPageObject {
 
@@ -13,6 +14,7 @@ public abstract class ArticlePageObject extends MainPageObject {
             TITLE_TPL,
             FOOTER_ELEMENT,
             OPTIONS_BUTTON,
+            OPTIONS_REMOVE_FROM_MY_LIST_BUTTON,
             OPTIONS_ADD_TO_MY_LIST_BUTTON,
             ADD_TO_MY_LIST_OVERLAY,
             MY_LIST_NAME_INPUT,
@@ -21,7 +23,7 @@ public abstract class ArticlePageObject extends MainPageObject {
             SYNC_YOUR_SAVED_ARTICLES_CLOSE_BUTTON,
             FOLDER_BY_NAME_TPL;
 
-    public ArticlePageObject(AppiumDriver<?> driver) {
+    public ArticlePageObject(RemoteWebDriver driver) {
         super(driver);
     }
 
@@ -48,7 +50,12 @@ public abstract class ArticlePageObject extends MainPageObject {
     public String getArticleTitle() {
 
         WebElement title_element = waitForTitleElement();
-        return title_element.getAttribute("name");
+
+        if (!Platform.getInstance().isMobileWeb()) {
+            return title_element.getAttribute("name");
+        } else {
+            return title_element.getText();
+        }
     }
 
     public void checkArticleTitlePresent(String name_of_title) {
@@ -60,7 +67,7 @@ public abstract class ArticlePageObject extends MainPageObject {
             );
         } else {
             String title_xpath = getTitleByName(name_of_title);
-            waitForElementPresent(
+            this.waitForElementPresent(
                     title_xpath,
                     "Cannot find article title",
                     15
@@ -80,14 +87,19 @@ public abstract class ArticlePageObject extends MainPageObject {
                     "Cannot find the end of article",
                     20
             );
-        } else {
+        } else if (Platform.getInstance().isIOS()) {
             this.swipeUpTillElementAppear(
                     FOOTER_ELEMENT,
                     "Cannot find the end of article",
                     20
             );
+        } else {
+            this.scrollWebPageTillElementNotVisible(
+                    FOOTER_ELEMENT,
+                    "Cannot find the end of article",
+                    20
+            );
         }
-
     }
 
     public void addArticleToMyListForTheFirstTime(String name_of_folder) {
@@ -154,27 +166,35 @@ public abstract class ArticlePageObject extends MainPageObject {
 
     public void addArticlesToMySavedForTheFirstTime() {
 
-        TouchAction<?> action = new TouchAction<>(driver);
+        if (driver instanceof AppiumDriver) {
 
-        int screen_size_by_y = driver.manage().window().getSize().getHeight();
-        int screen_size_by_x = driver.manage().window().getSize().getWidth();
+            TouchAction<?> action = new TouchAction<>((AppiumDriver<?>) driver);
 
-        action
-                .press(PointOption.point(screen_size_by_x/2, screen_size_by_y/2))
-                .release()
-                .perform();
+            int screen_size_by_y = driver.manage().window().getSize().getHeight();
+            int screen_size_by_x = driver.manage().window().getSize().getWidth();
 
-        this.addArticlesToMySaved();
+            action
+                    .press(PointOption.point(screen_size_by_x / 2, screen_size_by_y / 2))
+                    .release()
+                    .perform();
 
-        this.waitForElementAndClick(
-                SYNC_YOUR_SAVED_ARTICLES_CLOSE_BUTTON,
-                "Cannot find close sync your saved articles button",
-                15
-        );
+            this.addArticlesToMySaved();
+
+            this.waitForElementAndClick(
+                    SYNC_YOUR_SAVED_ARTICLES_CLOSE_BUTTON,
+                    "Cannot find close sync your saved articles button",
+                    15
+            );
+        } else {
+            System.out.println("Method addArticlesToMySavedForTheFirstTime does nothing for platform " + Platform.getInstance().getPlatformVar());
+        }
     }
 
     public void addArticlesToMySaved() {
 
+        if (Platform.getInstance().isMobileWeb()) {
+            this.removeArticleFromSavedIfItAdded();
+        }
         this.waitForElementAndClick(
                 OPTIONS_ADD_TO_MY_LIST_BUTTON,
                 "Cannot find option to add article to reading list",
@@ -182,13 +202,33 @@ public abstract class ArticlePageObject extends MainPageObject {
         );
     }
 
+    public void removeArticleFromSavedIfItAdded() {
+
+        if (this.isElementPresent(OPTIONS_REMOVE_FROM_MY_LIST_BUTTON)) {
+            this.waitForElementAndClick(
+                    OPTIONS_REMOVE_FROM_MY_LIST_BUTTON,
+                    "Cannot click button to remove an article from saved",
+                    15
+            );
+            this.waitForElementPresent(
+                    OPTIONS_ADD_TO_MY_LIST_BUTTON,
+                    "Cannot find button to add an article to save list after removing it from this list before",
+                    15
+            );
+        }
+    }
+
     public void closeArticle() {
 
-        this.waitForElementAndClick(
-                CLOSE_ARTICLE_BUTTON,
-                "Cannot close article, cannot find X button",
-                10
-        );
+        if (!Platform.getInstance().isMobileWeb()) {
+            this.waitForElementAndClick(
+                    CLOSE_ARTICLE_BUTTON,
+                    "Cannot close article, cannot find X button",
+                    10
+            );
+        } else {
+            System.out.println("Method closeArticle do nothing for platform " + Platform.getInstance().getPlatformVar());
+        }
     }
 
     private static String getFolderByName(String name_of_folder) {

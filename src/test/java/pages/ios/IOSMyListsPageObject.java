@@ -1,6 +1,6 @@
 package pages.ios;
 
-import io.appium.java_client.AppiumDriver;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import pages.MyListsPageObject;
 
 public class IOSMyListsPageObject extends MyListsPageObject {
@@ -10,7 +10,7 @@ public class IOSMyListsPageObject extends MyListsPageObject {
         ELEMENT_TO_DELETE_ARTICLE = "id:swipe action delete";
     }
 
-    public IOSMyListsPageObject(AppiumDriver<?> driver) {
+    public IOSMyListsPageObject(RemoteWebDriver driver) {
         super(driver);
     }
 }

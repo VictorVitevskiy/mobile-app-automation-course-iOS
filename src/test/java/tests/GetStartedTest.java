@@ -1,5 +1,6 @@
 package tests;
 
+import lib.CoreTestCase;
 import lib.Platform;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
