@@ -7,17 +7,25 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 public class Platform {
 
     private static final String PLATFORM_IOS = "ios";
     private static final String PLATFORM_ANDROID = "android";
     private static final String PLATFORM_MOBILE_WEB = "mobile_web";
+    private static final String PATH_TO_PLATFORM_PROPERTIES = "src/test/resources/platformConfiguration.properties";
     private static final String APPIUM_URL = "http://127.0.0.1:4723/wd/hub";
 
+    private static final Properties properties = new Properties();
     private static Platform instance;
 
     private Platform() {}
@@ -60,7 +68,7 @@ public class Platform {
     }
 
     public String getPlatformVar() {
-        return System.getenv("PLATFORM");
+        return getPlatformVariableFromFile("PLATFORM");
     }
 
     private DesiredCapabilities getAndroidDesiredCapabilities() {
@@ -109,5 +117,17 @@ public class Platform {
         chromeOptions.addArguments("window-size=340,640");
 
         return chromeOptions;
+    }
+
+    private String getPlatformVariableFromFile(String platform) {
+        try (InputStream inputStream = new FileInputStream(PATH_TO_PLATFORM_PROPERTIES);
+             InputStreamReader inputStreamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8)) {
+            properties.load(inputStreamReader);
+            return properties.getProperty(platform);
+        } catch (IOException exception) {
+            System.out.println("Can't read '" + platform + "' from file");
+            exception.printStackTrace();
+        }
+        return null;
     }
 }

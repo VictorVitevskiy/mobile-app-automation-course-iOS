@@ -14,6 +14,14 @@
 /idea/
 */idea/*
 
+**/allure-results/
+/allure-results/
+*/allure-results/*
+
+**/.allure/
+/.allure/
+*/.allure/*
+
 **/apps/
 /apps/
 */apps/*
