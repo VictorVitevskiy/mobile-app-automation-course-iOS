@@ -7,7 +7,6 @@ import lib.CoreTestCase;
 import lib.Platform;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.DisabledIfEnvironmentVariable;
 import pages.ArticlePageObject;
 import pages.SearchPageObject;
 

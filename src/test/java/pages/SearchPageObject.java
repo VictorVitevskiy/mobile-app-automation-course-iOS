@@ -2,7 +2,6 @@ package pages;
 
 import io.qameta.allure.Step;
 import lib.Platform;
-import org.junit.platform.suite.api.SelectClasses;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebDriver;
 

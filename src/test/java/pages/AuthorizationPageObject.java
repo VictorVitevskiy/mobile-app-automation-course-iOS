@@ -1,7 +1,6 @@
 package pages;
 
 import io.qameta.allure.Step;
-import org.junit.platform.suite.api.Suite;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 public class AuthorizationPageObject extends MainPageObject {
