@@ -1,5 +1,6 @@
 package pages;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 public class WelcomeIOSPageObject extends MainPageObject {
@@ -12,6 +13,7 @@ public class WelcomeIOSPageObject extends MainPageObject {
         super(driver);
     }
 
+    @Step("Waiting for learn more link")
     public void waitForLearnMoreLink() {
 
         this.waitForElementPresent(
@@ -20,6 +22,7 @@ public class WelcomeIOSPageObject extends MainPageObject {
         );
     }
 
+    @Step("Clicking button to skip welcome page (this method only for iOS)")
     public void clickSkipButton() {
 
         this.waitForElementAndClick(

@@ -3,6 +3,7 @@ package pages;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.TouchAction;
 import io.appium.java_client.touch.offset.PointOption;
+import io.qameta.allure.Step;
 import lib.Platform;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -27,6 +28,7 @@ public abstract class ArticlePageObject extends MainPageObject {
         super(driver);
     }
 
+    @Step("Waiting for title on the article page")
     public WebElement waitForTitleElement() {
 
         return this.waitForElementPresent(
@@ -36,6 +38,7 @@ public abstract class ArticlePageObject extends MainPageObject {
         );
     }
 
+    @Step("Waiting for title element '{name_of_title}' on the article page")
     public WebElement waitForTitleElement(String name_of_title) {
 
         String title_xpath = getTitleByName(name_of_title);
@@ -47,9 +50,11 @@ public abstract class ArticlePageObject extends MainPageObject {
         );
     }
 
+    @Step("Get article title")
     public String getArticleTitle() {
 
         WebElement title_element = waitForTitleElement();
+        screenshot(this.takeScreenshot("article_title"));
 
         if (!Platform.getInstance().isMobileWeb()) {
             return title_element.getAttribute("name");
@@ -58,6 +63,7 @@ public abstract class ArticlePageObject extends MainPageObject {
         }
     }
 
+    @Step("Checking for article title '{name_of_title}' present on the page")
     public void checkArticleTitlePresent(String name_of_title) {
 
         if (Platform.getInstance().isAndroid()) {
@@ -79,6 +85,7 @@ public abstract class ArticlePageObject extends MainPageObject {
         }
     }
 
+    @Step("Swiping to footer on article ")
     public void swipeToFooter() {
 
         if (Platform.getInstance().isAndroid()) {
@@ -102,6 +109,7 @@ public abstract class ArticlePageObject extends MainPageObject {
         }
     }
 
+    @Step("Adding article to the list '{name_of_folder}' for the first time (this method only for Android)")
     public void addArticleToMyListForTheFirstTime(String name_of_folder) {
 
         this.waitForElementAndClick(
@@ -142,6 +150,7 @@ public abstract class ArticlePageObject extends MainPageObject {
         );
     }
 
+    @Step("Adding article to existing list '{name_of_folder}' (this method only for Android)")
     public void addArticleIntoExistingMyList(String name_of_folder) {
 
         this.waitForElementAndClick(
@@ -164,6 +173,7 @@ public abstract class ArticlePageObject extends MainPageObject {
         );
     }
 
+    @Step("Adding article to my saved for the first time (this method only for iOS)")
     public void addArticlesToMySavedForTheFirstTime() {
 
         if (driver instanceof AppiumDriver) {
@@ -190,6 +200,7 @@ public abstract class ArticlePageObject extends MainPageObject {
         }
     }
 
+    @Step("Adding article to my saved")
     public void addArticlesToMySaved() {
 
         if (Platform.getInstance().isMobileWeb()) {
@@ -202,6 +213,7 @@ public abstract class ArticlePageObject extends MainPageObject {
         );
     }
 
+    @Step("Remove article from my saved if it is have been added (this method only for Mobile Web)")
     public void removeArticleFromSavedIfItAdded() {
 
         if (this.isElementPresent(OPTIONS_REMOVE_FROM_MY_LIST_BUTTON)) {
@@ -213,6 +225,7 @@ public abstract class ArticlePageObject extends MainPageObject {
         }
     }
 
+    @Step("Closing the article")
     public void closeArticle() {
 
         if (!Platform.getInstance().isMobileWeb()) {

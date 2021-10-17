@@ -1,6 +1,8 @@
 package pages;
 
+import io.qameta.allure.Step;
 import lib.Platform;
+import org.junit.platform.suite.api.SelectClasses;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
@@ -25,6 +27,7 @@ public abstract class SearchPageObject extends MainPageObject {
         super(driver);
     }
 
+    @Step("Initialization the input field")
     public void initSearchInput() {
 
         this.waitForElementPresent(
@@ -38,6 +41,7 @@ public abstract class SearchPageObject extends MainPageObject {
         );
     }
 
+    @Step("Waiting for button to cancel search result")
     public void waitForCancelButtonToAppear() {
 
         this.waitForElementPresent(
@@ -46,6 +50,7 @@ public abstract class SearchPageObject extends MainPageObject {
         );
     }
 
+    @Step("Waiting for search cancel button to disappear")
     public void waitForCancelButtonToDisappear() {
 
         this.waitForElementNotPresent(
@@ -55,6 +60,7 @@ public abstract class SearchPageObject extends MainPageObject {
         );
     }
 
+    @Step("Clicking button to cancel search result")
     public void clickCancelSearch() {
 
         this.waitForElementAndClick(
@@ -64,6 +70,7 @@ public abstract class SearchPageObject extends MainPageObject {
         );
     }
 
+    @Step("Typing '{search_line}' to the search line")
     public void typeSearchLine(String search_line) {
 
         this.waitForElementAndClear(
@@ -80,6 +87,7 @@ public abstract class SearchPageObject extends MainPageObject {
         );
     }
 
+    @Step("Verifying text in search line")
     public void verifyTextInSearchLine(String search_line) {
 
         this.waitForElementPresent(
@@ -102,6 +110,7 @@ public abstract class SearchPageObject extends MainPageObject {
         }
     }
 
+    @Step("Waiting for search result '{substring}'")
     public void waitForSearchResult(String substring) {
 
         String search_result_xpath = getResultSearchElementByDescription(substring);
@@ -111,7 +120,8 @@ public abstract class SearchPageObject extends MainPageObject {
         );
     }
 
-    public void clickByArticleWithSubstring(String substring) {
+    @Step("Waiting for search result and select an article by '{substring}' in article description")
+    public void clickByArticleWithDescription(String substring) {
 
         String search_result_xpath = getResultSearchElementByDescription(substring);
         this.waitForElementAndClick(
@@ -121,6 +131,7 @@ public abstract class SearchPageObject extends MainPageObject {
         );
     }
 
+    @Step("Waiting for search result and select an article by '{substring}' in article title")
     public void clickByArticleWithTitle(String substring) {
 
         String search_result_xpath = getResultSearchElementByTitle(substring);
@@ -131,6 +142,7 @@ public abstract class SearchPageObject extends MainPageObject {
         );
     }
 
+    @Step("Waiting for search result by article title '{title}' and description '{description}'")
     public void waitForElementByTitleAndDescription(String title, String description) {
 
         String search_result_xpath = getResultSearchElementByTitleAndDescription(title, description);
@@ -141,6 +153,7 @@ public abstract class SearchPageObject extends MainPageObject {
         );
     }
 
+    @Step("Getting amount of found articles")
     public int getAmountOfFoundArticles() {
 
         this.waitForElementPresent(
@@ -151,6 +164,7 @@ public abstract class SearchPageObject extends MainPageObject {
         return this.getAmountOfElements(SEARCH_RESULT_ELEMENT);
     }
 
+    @Step("Waiting for empty result label")
     public void waitForEmptyResultsLabel() {
 
         this.waitForElementPresent(
@@ -159,6 +173,7 @@ public abstract class SearchPageObject extends MainPageObject {
         );
     }
 
+    @Step("Making sure there are no results for the search")
     public void assertThereIsNoResultOfSearch() {
 
         this.assertElementNotPresent(
@@ -167,6 +182,7 @@ public abstract class SearchPageObject extends MainPageObject {
         );
     }
 
+    @Step("Checking correctness of search results with search input '{search_text}'")
     public void checkCorrectnessOfSearchResults(String search_text) {
 
         this.waitForElementPresent(
@@ -202,6 +218,7 @@ public abstract class SearchPageObject extends MainPageObject {
         }
     }
 
+    @Step("Checking for search results present")
     public void assertSearchResultsPresent() {
 
         this.assertElementPresent(
@@ -210,18 +227,13 @@ public abstract class SearchPageObject extends MainPageObject {
         );
     }
 
+    @Step("Checking for search results not present")
     public void assertSearchResultsNotPresent() {
 
         this.assertElementNotPresent(
                 SEARCH_RESULT_ELEMENT,
                 "Articles are still on the page"
         );
-
-//        assertEquals(
-//                0,
-//                driver.findElements(By.id("org.wikipedia:id/page_list_item_container")).size(),
-//                "Articles are still on the page "
-//        );
     }
 
     /**

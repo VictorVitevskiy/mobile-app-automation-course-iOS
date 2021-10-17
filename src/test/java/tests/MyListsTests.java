@@ -4,12 +4,15 @@ import factories.ArticlePageObjectFactory;
 import factories.MyListsPageObjectFactory;
 import factories.NavigationUIFactory;
 import factories.SearchPageObjectFactory;
+import io.qameta.allure.*;
 import lib.CoreTestCase;
 import lib.Platform;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import pages.*;
 
+@Epic("Tests adding articles to my list")
 public class MyListsTests extends CoreTestCase {
 
     private static final String folder_name = "Learning programming";
@@ -18,6 +21,12 @@ public class MyListsTests extends CoreTestCase {
             PASSWORD = "Vit19922411";
 
     @Test
+    @Features(value = {@Feature(value = "Search"), @Feature(value = "Article"),
+            @Feature(value = "Navigation"), @Feature(value = "My lists")})
+    @DisplayName("Save article to my list")
+    @Description("Open article with search input. Save article to my list. Open my lists and remove article from it")
+    @Step("Starting test testSaveFirstArticleToMyList")
+    @Severity(value = SeverityLevel.MINOR)
     public void testSaveFirstArticleToMyList() throws InterruptedException {
 
         String article_title = "Appium";
@@ -41,17 +50,13 @@ public class MyListsTests extends CoreTestCase {
             authorizationPage.enterLoginData(LOGIN, PASSWORD);
             authorizationPage.submitForm();
 
-            Assertions.assertEquals(
-                    article_title,
-                    articlePage.getArticleTitle(),
-                    "We are not on the same page after login."
-            );
             articlePage.addArticlesToMySaved();
         }
         articlePage.closeArticle();
 
         NavigationUI navigationUI = NavigationUIFactory.get(driver);
         navigationUI.openNavigation();
+        Thread.sleep(2000);
         navigationUI.clickMyLists();
 
         MyListsPageObject myListsPageObject = MyListsPageObjectFactory.get(driver);
@@ -62,6 +67,13 @@ public class MyListsTests extends CoreTestCase {
     }
 
     @Test
+    @Features(value = {@Feature(value = "Search"), @Feature(value = "Article"),
+            @Feature(value = "Navigation"), @Feature(value = "My lists")})
+    @DisplayName("Save two articles to my list")
+    @Description("Open article with search input. Save article to my list. Open second article with search input and " +
+            "save it to my list. Open my lists and remove one article from it. Check existing of the second article in my list")
+    @Step("Starting test testSaveTwoArticlesToMyList")
+    @Severity(value = SeverityLevel.MINOR)
     public void testSaveTwoArticlesToMyList() throws InterruptedException {
 
         String folder_name = "Learning programming";

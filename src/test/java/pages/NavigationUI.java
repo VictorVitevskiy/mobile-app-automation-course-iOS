@@ -1,5 +1,6 @@
 package pages;
 
+import io.qameta.allure.Step;
 import lib.Platform;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
@@ -13,6 +14,7 @@ public abstract class NavigationUI extends MainPageObject {
         super(driver);
     }
 
+    @Step("Clicking link to open my lists")
     public void clickMyLists() {
 
         if (Platform.getInstance().isMobileWeb()) {
@@ -29,6 +31,7 @@ public abstract class NavigationUI extends MainPageObject {
         );
     }
 
+    @Step("Open navigation panel (this method only for Mobile Web)")
     public void openNavigation() {
 
         if (Platform.getInstance().isMobileWeb()) {

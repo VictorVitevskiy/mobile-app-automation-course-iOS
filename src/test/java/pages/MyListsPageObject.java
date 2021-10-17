@@ -1,5 +1,6 @@
 package pages;
 
+import io.qameta.allure.Step;
 import lib.Platform;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
@@ -15,6 +16,7 @@ public abstract class MyListsPageObject extends MainPageObject {
         super(driver);
     }
 
+    @Step("Opening '{folder_name}' folder")
     public void openFolderByName(String folder_name) {
 
         String folder_name_after = getFolderByName(folder_name);
@@ -25,16 +27,7 @@ public abstract class MyListsPageObject extends MainPageObject {
         );
     }
 
-    public void openArticleByTitle(String article_title) {
-
-        String article_xpath = getSavedArticleByTitle(article_title);
-        this.waitForElementAndClick(
-                article_xpath,
-                "Cannot find folder by name " + article_title,
-                30
-        );
-    }
-
+    @Step("Delete '{article_title}' article from my list")
     public void swipeByArticleToDelete(String article_title) {
 
         this.waitForArticleToAppearByTitle(article_title);
@@ -62,6 +55,7 @@ public abstract class MyListsPageObject extends MainPageObject {
         this.waitForArticleToDisappearByTitle(article_title);
     }
 
+    @Step("Checking the absence of an article element 'article_title' in my list")
     public void waitForArticleToDisappearByTitle(String article_title) {
 
         String article_xpath = getSavedArticleByTitle(article_title);
@@ -72,6 +66,7 @@ public abstract class MyListsPageObject extends MainPageObject {
         );
     }
 
+    @Step("Checking the presence of an article element 'article_title' in my list")
     public void waitForArticleToAppearByTitle(String article_title) {
 
         String article_xpath = getSavedArticleByTitle(article_title);
